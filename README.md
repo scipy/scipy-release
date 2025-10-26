@@ -26,7 +26,7 @@ as cron jobs twice a week, and uploads nightlies to
 [https://anaconda.org/scientific-python-nightly-wheels/scipy](anaconda.org/scientific-python-nightly-wheels/scipy).
 
 For SciPy releases, the branch naming should match those of the main
-`scipy/scipy` repository, e.g., `maintenance/2.3.x` for the 2.3.x releases.
+`scipy/scipy` repository, e.g., `maintenance/1.17.x` for the 1.17.x releases.
 
 Which branch, commit or tag is built when a set of wheel builds is triggered is
 controlled by the `SOURCE_REF_TO_BUILD` variable at the top of
@@ -64,7 +64,7 @@ PyPI, however as of today that is not implemented.
 ## Security
 
 To report a security vulnerability for SciPy itself, please see
-[the security policy on the main repo](https://github.com/numpy/numpy/?tab=security-ov-file#readme).
+[the security policy on the main repo](https://github.com/scipy/scipy/?tab=security-ov-file#readme).
 
 To discuss a supply chain security related topic for the code in this
 repository, please open an issue on this repository if it can be discussed in
