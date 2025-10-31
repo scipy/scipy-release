@@ -156,8 +156,8 @@ jobs:
             CIBW_ENV="CIBW_ENVIRONMENT_MACOS=MACOSX_DEPLOYMENT_TARGET=14.0 INSTALL_OPENBLAS=false"
           else
             CIBW_ENV="CIBW_ENVIRONMENT_MACOS=PKG_CONFIG_PATH=$PWD/.openblas \
-            MACOSX_DEPLOYMENT_TARGET=${{ matrix.buildplat[4] }}" \
-            SDKROOT=$(xcrun --sdk macosx --show-sdk-path)"
+              MACOSX_DEPLOYMENT_TARGET=${{ matrix.buildplat[4] }} \
+              SDKROOT=$(xcrun --sdk macosx --show-sdk-path)"
           fi
           echo "$CIBW_ENV" >> "$GITHUB_ENV"
 
@@ -166,6 +166,7 @@ jobs:
             $PREFIX delocate-wheel -v $EXCLUDE --require-archs \
             {delocate_archs} -w {dest_dir} {wheel} && echo "-----------" &&\
             delocate-listdeps -d {dest_dir}/*.whl"
+          echo "CIBW_REPAIR_WHEEL_COMMAND_MACOS=$CIBW" >> "$GITHUB_ENV"
 
       - name: Build Wheels
         shell: bash -el {0}
