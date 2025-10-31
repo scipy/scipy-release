@@ -50,7 +50,7 @@ if [[ "$INSTALL_OPENBLAS" = "true" ]] ; then
       # For scipy_openblas we need the older fortran compilers that were used to
       # build it, homebrew's are too modern.
       source $PROJECT_DIR/tools/wheels/gfortran_macos.sh
-      
+
       lib_loc=$(python -c"import scipy_openblas32; print(scipy_openblas32.get_lib_dir())")
       # Use the libgfortran from gfortran rather than the one in the wheel
       # since delocate gets confused if there is more than one
