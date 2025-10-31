@@ -51,16 +51,16 @@ jobs:
         # should also be able to do multi-archs on a single entry, e.g.
         # [windows-2025, win*, "AMD64 x86"]. However, those two require a different compiler setup
         # so easier to separate out here.
-#        - [ubuntu-24.04, manylinux, x86_64, "", ""]
-#        - [ubuntu-24.04, musllinux, x86_64, "", ""]
-#        - [ubuntu-24.04-arm, manylinux, aarch64, "", ""]
-#        - [ubuntu-24.04-arm, musllinux, aarch64, "", ""]
+        - [ubuntu-24.04, manylinux, x86_64, "", ""]
+        - [ubuntu-24.04, musllinux, x86_64, "", ""]
+        - [ubuntu-24.04-arm, manylinux, aarch64, "", ""]
+        - [ubuntu-24.04-arm, musllinux, aarch64, "", ""]
         - [macos-15-intel, macosx, x86_64, openblas, "10.15"]
         - [macos-15-intel, macosx, x86_64, accelerate, "14.0"]
         - [macos-14, macosx, arm64, openblas, "12.3"]
         - [macos-14, macosx, arm64, accelerate, "14.0"]
-#        - [windows-2025, win, AMD64, "", ""]
-#        - [windows-11-arm, win, ARM64, "", ""]
+        - [windows-2025, win, AMD64, "", ""]
+        - [windows-11-arm, win, ARM64, "", ""]
         python: [["cp311", "3.11"]]#, ["cp312", "3.12"], ["cp313", "3.13"], ["cp313t", "3.13"], ["cp314", "cp314"], ["cp314t", "cp314"]]
         # python[0] is used to specify the python versions made by cibuildwheel
 
@@ -162,10 +162,7 @@ jobs:
           echo "$CIBW_ENV" >> "$GITHUB_ENV"
 
           PREFIX=DYLD_LIBRARY_PATH="\$(dirname \$(gfortran --print-file-name libgfortran.dylib))"
-          CIBW="$PREFIX delocate-listdeps -d {wheel} && echo "-----------" &&\
-            $PREFIX delocate-wheel -v $EXCLUDE --require-archs \
-            {delocate_archs} -w {dest_dir} {wheel} && echo "-----------" &&\
-            delocate-listdeps -d {dest_dir}/*.whl"
+          CIBW="$PREFIX delocate-wheel -v $EXCLUDE --require-archs {delocate_archs} -w {dest_dir} {wheel}"
           echo "CIBW_REPAIR_WHEEL_COMMAND_MACOS=$CIBW" >> "$GITHUB_ENV"
 
       - name: Build Wheels
