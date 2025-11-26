@@ -206,7 +206,7 @@ jobs:
         if: github.event_name == 'schedule' && github.repository == 'scipy/scipy-release'
         shell: bash -el {0}  # required for micromamba
         env:
-          TOKEN: ${{ secrets.scipy_NIGHTLY_UPLOAD_TOKEN }}
+          TOKEN: ${{ secrets.SCIPY_NIGHTLY_UPLOAD_TOKEN }}
         run: |
           anaconda -q -t ${TOKEN} upload --force -u scientific-python-nightly-wheels ./dist/*.whl
 
