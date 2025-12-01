@@ -184,7 +184,7 @@ jobs:
       # dependencies when building release artifacts.
       - name: install micromamba
         # win-arm64 is unsupported by micromamba at the moment
-        if: github.event_name == 'schedule' && matrix.buildplat[1] != 'win_arm64'
+        if: matrix.buildplat[1] != 'win' && matrix.buildplat[2] != 'ARM64' && github.event_name == 'schedule'
         uses: mamba-org/setup-micromamba@b09ef9b599704322748535812ca03efb2625677b # v2.0.5
         with:
           # For installation of anaconda-client, required for upload to anaconda.org
@@ -194,7 +194,7 @@ jobs:
             anaconda-client
 
       - name: win-arm64 install anaconda client
-        if: github.event_name == 'schedule' && matrix.buildplat[1] == 'win_arm64'
+        if: matrix.buildplat[1] != 'win' && matrix.buildplat[2] != 'ARM64' && github.event_name == 'schedule'
         run: |
           # Rust installation needed for rpds-py.
           Invoke-WebRequest https://static.rust-lang.org/rustup/dist/aarch64-pc-windows-msvc/rustup-init.exe -UseBasicParsing -Outfile rustup-init.exe
