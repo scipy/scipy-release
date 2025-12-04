@@ -184,7 +184,7 @@ jobs:
       # dependencies when building release artifacts.
       - name: install micromamba
         # win-arm64 is unsupported by micromamba at the moment
-        if: !(matrix.buildplat[1] == 'win' && matrix.buildplat[2] == 'ARM64') # && github.event_name == 'schedule'
+        if: ! (matrix.buildplat[1] == 'win' && matrix.buildplat[2] == 'ARM64') # && github.event_name == 'schedule'
         uses: mamba-org/setup-micromamba@b09ef9b599704322748535812ca03efb2625677b # v2.0.5
         with:
           # For installation of anaconda-client, required for upload to anaconda.org
