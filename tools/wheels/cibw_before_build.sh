@@ -24,6 +24,16 @@ elif [ -z $INSTALL_OPENBLAS ]; then
     export INSTALL_OPENBLAS=true
 fi
 
+if [[ $RUNNER_OS == "macOS" ]]; then
+  if [ -z $INSTALL_GFORTRAN ]; then
+    # the macos_arm64 build might not set this variable
+    export INSTALL_GFORTRAN=true
+  fi
+  if [[ $INSTALL_GFORTRAN == "true" ]]; then
+    source $PROJECT_DIR/tools/wheels/gfortran_macos.sh
+  fi
+fi
+
 # Install OpenBLAS from scipy-openblas32|64
 if [[ "$INSTALL_OPENBLAS" = "true" ]] ; then
     # By default, use scipy-openblas32
@@ -49,7 +59,6 @@ if [[ "$INSTALL_OPENBLAS" = "true" ]] ; then
     if [[ $RUNNER_OS == "macOS" ]]; then
       # For scipy_openblas we need the older fortran compilers that were used to
       # build it, homebrew's are too modern.
-      source $PROJECT_DIR/tools/wheels/gfortran_macos.sh
 
       lib_loc=$(python -c"import scipy_openblas32; print(scipy_openblas32.get_lib_dir())")
       # Use the libgfortran from gfortran rather than the one in the wheel

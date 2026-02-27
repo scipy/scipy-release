@@ -144,20 +144,29 @@ jobs:
       - name: Setup macOS
         if: startsWith( matrix.buildplat[0], 'macos-' )
         run: |
-          if [[ ${{ matrix.buildplat[3] }} == 'accelerate' ]]; then
+          if [[ ${{ matrix.buildplat[3] }} == "accelerate" ]]; then
             echo CIBW_CONFIG_SETTINGS=\"setup-args=-Dblas=accelerate\" >> "$GITHUB_ENV"
-
-            # use preinstalled gfortran for Accelerate builds
-            ln -s $(which gfortran-13) gfortran
-            export PATH=$PWD:$PATH
-            echo "PATH=$PATH" >> "$GITHUB_ENV"
 
             # Builds with Accelerate only target macOS>=14.0
             CIBW_ENV="CIBW_ENVIRONMENT_MACOS=MACOSX_DEPLOYMENT_TARGET=14.0 INSTALL_OPENBLAS=false"
+
+            if [[ ${{ matrix.buildplat[2] }} == "arm64" ]]; then          
+              # use preinstalled gfortran for Accelerate builds
+              ln -s $(which gfortran-13) gfortran
+              export PATH=$PWD:$PATH
+              echo "PATH=$PATH" >> "$GITHUB_ENV"
+              CIBW_ENV+=" INSTALL_GFORTRAN=false"
+            else
+              # x64_64. Can't use preinstalled fortran because it targets macOS15
+              # Setting INSTALL_GFORTRAN=true causes the cibw_before_build script to install gfortran
+              CIBW_ENV+=" INSTALL_GFORTRAN=true"
+              CIBW_ENV+=" SDKROOT=$(xcrun --sdk macosx --show-sdk-path)"
+            fi
           else
             CIBW_ENV="CIBW_ENVIRONMENT_MACOS=PKG_CONFIG_PATH=$PWD/.openblas \
               MACOSX_DEPLOYMENT_TARGET=${{ matrix.buildplat[4] }} \
-              SDKROOT=$(xcrun --sdk macosx --show-sdk-path)"
+              SDKROOT=$(xcrun --sdk macosx --show-sdk-path) \
+              INSTALL_GFORTRAN=true"
           fi
           echo "$CIBW_ENV" >> "$GITHUB_ENV"
 

@@ -10,10 +10,10 @@ if [[ $PLATFORM == "x86_64" ]]; then
   #sudo ln -s $GFORTRAN /usr/local/bin/gfortran
   # same version of gfortran as the openblas-libs
   # https://github.com/MacPython/gfortran-install.git
-  curl -L https://github.com/isuruf/gcc/releases/download/gcc-11.3.0-2/gfortran-darwin-x86_64-native.tar.gz -o gfortran.tar.gz
+  curl -L https://github.com/isuruf/gcc/releases/download/gcc-15.2.0/gfortran-darwin-x86_64-native.tar.gz -o gfortran.tar.gz
 
   GFORTRAN_SHA256=$(shasum -a 256 gfortran.tar.gz)
-  KNOWN_SHA256="981367dd0ad4335613e91bbee453d60b6669f5d7e976d18c7bdb7f1966f26ae4  gfortran.tar.gz"
+  KNOWN_SHA256="fb03c1f37bf0258ada6e3e41698e3ad416fff4dad448fd746e01d8ccf1efdc0f  gfortran.tar.gz"
   if [ "$GFORTRAN_SHA256" != "$KNOWN_SHA256" ]; then
       echo sha256 mismatch
       exit 1
