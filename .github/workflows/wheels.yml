@@ -41,6 +41,7 @@ jobs:
   build_wheels:
     name: BLD > ${{ matrix.python[0] }}-${{ matrix.buildplat[1] }}-${{ matrix.buildplat[2] }}-${{ matrix.buildplat[3] }}
     runs-on: ${{ matrix.buildplat[0] }}
+    if: (github.repository == 'andyfaff/scipy-release' || github.repository == '')
     strategy:
       # Ensure that a wheel builder finishes even if another fails
       fail-fast: false
