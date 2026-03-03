@@ -115,7 +115,8 @@ jobs:
           $CIBW = $CIBW.replace("\","/")
           echo "CIBW_ENVIRONMENT_WINDOWS=PKG_CONFIG_PATH=$CIBW" >> $env:GITHUB_ENV
 
-      # the macOS matrix is complicated.
+      # gfortran status for macOS
+      # -------------------------
       # - arm64,  accelerate, >=14.0
       #     The easiest of them all (sort of). However, if you wish to target 14 you
       #     can only build on macos-14 with the system compiler. If you try building on
@@ -124,23 +125,22 @@ jobs:
       #     In addition, we can't use Accelerate for < 14 because the library had bugs.
       #     This means OpenBLAS has to be used.
       # - x86_64, accelerate, >=14.0
-      #     Complicated because x86_64 is only available on the macos-15-intel image.
+      #     x86_64 is only available on the macos-15-intel image.
+      #     Uses build from https://github.com/isuruf/gcc/releases/. The 15.2.0
+      #     build is back compatible to macOS 14.
       # - x86_64, openblas, "10.14"
-      #     Complicated because x86_64 is only available on the macos-15-intel image.
-      #     Needs an older compiler.
+      #     x86_64 is only available on the macos-15-intel image.
+      #     This can be made back compatible to macOS-10.14. The 15.2.0 build at
+      #     https://github.com/isuruf/gcc/releases/ satisfies this.
       # - arm64, openblas, "12.3"
-      #     Complicated because MACOS_DEPLOYMENT_TARGET has to be set to 12.3 (there's
-      #     some reason why we don't support <12.3), which results in 12_3 in the wheel
-      #     name. This is illegal, so we have to change the wheel name to 12_0 after
-      #     the build.
+      #     We ideally want this back compatible to macOS-12. The build at
+      #     https://github.com/fxcoudert/gfortran-for-macOS/releases/download/12.1-monterey/gfortran-ARM-12.1-Monterey.dmg
+      #     satisfies those requirements.
+      #     MACOS_DEPLOYMENT_TARGET has to be set to 12.3 (there's some reason why we
+      #     don't support <12.3)
       #     OpenBLAS is also complicated because the `delocate` step tries
       #     to copy two libgfortran libraries into the wheel, and falls over. This
       #     necessitates using install_name_tool on the scipy_openblas32 dylibs.
-      #     The libraries are also built with an older version of gfortran (11), which
-      #     requires installation of that version. Whilst this version is available
-      #     from homebrew, it doesn't come with an old enough deployment target.
-      #     We therefore have to jump through hoops to install a community packaged
-      #     compiler.
       - name: Setup macOS
         if: startsWith( matrix.buildplat[0], 'macos-' )
         run: |
