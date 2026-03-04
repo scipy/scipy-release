@@ -107,7 +107,6 @@ jobs:
       - name: pkg-config-for-win
         if: runner.os == 'windows'
         run: |
-          choco install -y --no-progress --stoponfirstfailure --checksum 6004DF17818F5A6DBF19CB335CC92702 pkgconfiglite
           $CIBW = "${{ github.workspace }}/.openblas"
           # pkgconfig needs a complete path, and not just "./openblas since the
           # build is run in a tmp dir (?)
@@ -175,14 +174,15 @@ jobs:
           CIBW="$PREFIX delocate-wheel -v $EXCLUDE --require-archs {delocate_archs} -w {dest_dir} {wheel}"
           echo "CIBW_REPAIR_WHEEL_COMMAND_MACOS=$CIBW" >> "$GITHUB_ENV"
 
-      - name: Build Wheels
-        shell: bash -el {0}
-        run: |
-          pip install cibuildwheel
-          export CIBW_BUILD=${{ matrix.python[0] }}-${{ matrix.buildplat[1] }}*
-          export CIBW_ARCHS=${{ matrix.buildplat[2] }}
-          export CIBW_ENABLE="cpython-freethreading cpython-prerelease"
-          cibuildwheel --output-dir=dist --config-file=cibuildwheel.toml scipy-src
+      - name: Build wheels
+        uses: pypa/cibuildwheel@298ed2fb2c105540f5ed055e8a6ad78d82dd3a7e # v3.3.1
+        env:
+          CIBW_BUILD: ${{ matrix.python[0] }}-${{ matrix.buildplat[1] }}*
+          CIBW_ARCHS: ${{ matrix.buildplat[2] }}
+        with:
+           package-dir: scipy-src
+           output-dir: dist
+           config-file: cibuildwheel.toml
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
