@@ -179,6 +179,7 @@ jobs:
         env:
           CIBW_BUILD: ${{ matrix.python[0] }}-${{ matrix.buildplat[1] }}*
           CIBW_ARCHS: ${{ matrix.buildplat[2] }}
+          CIBW_ENABLE: cpython-freethreading cpython-prerelease
         with:
            package-dir: scipy-src
            output-dir: dist
