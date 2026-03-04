@@ -86,6 +86,7 @@ fi
 # cibuildwheel doesn't install delvewheel by default
 if [[ $RUNNER_OS == "Windows" ]]; then
     python -m pip install -r $PROJECT_DIR/requirements/delvewheel_requirements.txt
-    # instead of using choco
+    # pkgconf - carries out the role of pkg-config.
+    # Alternative is pkgconfiglite that you have to install with choco
     python -m pip install pkgconf
 fi
