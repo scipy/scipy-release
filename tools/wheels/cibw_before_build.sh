@@ -86,4 +86,6 @@ fi
 # cibuildwheel doesn't install delvewheel by default
 if [[ $RUNNER_OS == "Windows" ]]; then
     python -m pip install -r $PROJECT_DIR/requirements/delvewheel_requirements.txt
+    # instead of using choco
+    python -m pip install pkgconf
 fi
