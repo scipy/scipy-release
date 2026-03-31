@@ -189,7 +189,7 @@ jobs:
           name: ${{ matrix.python[0] }}-${{ matrix.buildplat[1] }}-${{ matrix.buildplat[2] }}-${{ matrix.buildplat[3] }}-${{ matrix.buildplat[4] }}
 
 # -------------------------------------------------------------------------------------
-  # Should we upload to nightly. We do this on a scheduled run, or a workflow dispatch with environment none'
+  # Should we upload to nightly. We do this on a scheduled run, or a workflow dispatch with environment 'none'
   nightly_upload:
     runs-on: ubuntu-latest
     if: github.repository == 'scipy/scipy-release' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'none'))
@@ -205,18 +205,18 @@ jobs:
       - name: Install micromamba
         uses: mamba-org/setup-micromamba@d7c9bd84e824b79d2af72a2d4196c7f4300d3476 # v3.0.0
         with:
-        # For installation of anaconda-client, required for upload to anaconda.org
-        init-shell: bash
-        environment-name: upload-env
-        create-args: >-
-          anaconda-client
+          # For installation of anaconda-client, required for upload to anaconda.org
+          init-shell: bash
+          environment-name: upload-env
+          create-args: >-
+            anaconda-client
 
-    - name: Upload to anaconda.org
-      shell: bash -el {0}  # required for micromamba
-      env:
-        TOKEN: ${{ secrets.SCIPY_NIGHTLY_UPLOAD_TOKEN }}
-      run: |
-        anaconda -q -t ${TOKEN} upload --force -u scientific-python-nightly-wheels ./dist/*.whl
+      - name: Upload to anaconda.org
+        shell: bash -el {0}  # required for micromamba
+        env:
+          TOKEN: ${{ secrets.SCIPY_NIGHTLY_UPLOAD_TOKEN }}
+        run: |
+          anaconda -q -t ${TOKEN} upload --force -u scientific-python-nightly-wheels ./dist/*.whl
 
 # -------------------------------------------------------------------------------------
   build_sdist:
