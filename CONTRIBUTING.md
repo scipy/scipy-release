@@ -58,7 +58,7 @@ it's recommended to only select the platform(s) you're interested in like this:
 -          - [windows-2022, win_amd64, ""]
 -          - [windows-2022, win32, ""]
 -          - [windows-11-arm, win_arm64, ""]
--        python: ["cp311", "cp312", "cp313", "cp313t", "cp314", "cp314t", "pp311"]
+-        python: ["cp312", "cp313", "cp314", "cp314t"]
 +        python: ["cp314", "cp314t"]
          exclude:
            # Don't build PyPy 32-bit windows
