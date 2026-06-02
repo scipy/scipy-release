@@ -41,7 +41,7 @@ jobs:
   build_wheels:
     name: BLD > ${{ matrix.python[0] }}-${{ matrix.buildplat[1] }}-${{ matrix.buildplat[2] }}-${{ matrix.buildplat[3] }}
     runs-on: ${{ matrix.buildplat[0] }}
-    if: (github.repository == 'andyfaff/scipy-release' || github.repository == '')
+    if: (github.repository == 'scipy/scipy-release' || github.repository == '')
     strategy:
       # Ensure that a wheel builder finishes even if another fails
       fail-fast: false
@@ -62,7 +62,7 @@ jobs:
         - [macos-14, macosx, arm64, accelerate, "14.0"]
         - [windows-2025, win, AMD64, "", ""]
         - [windows-11-arm, win, ARM64, "", ""]
-        python: [["cp312", "3.12"]]#, ["cp313", "3.13"], ["cp314", "cp314"], ["cp314t", "cp314"]]
+        python: [["cp312", "3.12"], ["cp313", "3.13"], ["cp314", "cp314"], ["cp314t", "cp314"]]
         # python[0] is used to specify the python versions made by cibuildwheel
 
     steps:
@@ -135,7 +135,7 @@ jobs:
         env:
           CIBW_BUILD: ${{ matrix.python[0] }}-${{ matrix.buildplat[1] }}*
           CIBW_ARCHS: ${{ matrix.buildplat[2] }}
-          CIBW_ENABLE: cpython-freethreading cpython-prerelease
+          CIBW_ENABLE: cpython-prerelease
         with:
            package-dir: scipy-src
            output-dir: dist
