@@ -212,7 +212,7 @@ jobs:
       - name: Test the sdist
         run: |
           python -m pip install -v dist/*.gz
-          pip install -r $GITHUB_WORKSPACE/requirements/test.txt
+          pip install pytest hypothesis pooch
           cd .. # Can't import scipy within scipy src directory
           python -c "import scipy, sys; print(scipy.__version__); sys.exit(scipy.test() is False)"
 
