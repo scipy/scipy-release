@@ -62,7 +62,7 @@ jobs:
         - [macos-14, macosx, arm64, accelerate, "14.0"]
         - [windows-2025, win, AMD64, "", ""]
         - [windows-11-arm, win, ARM64, "", ""]
-        python: ["cp312", "cp313", "cp314", "cp314t"]
+        python: ["cp312", "cp313", "cp314", "cp314t", "cp315", "cp315t"]
 
     steps:
       - name: Checkout scipy-release
@@ -130,7 +130,7 @@ jobs:
           echo "$CIBW_ENV" >> "$GITHUB_ENV"
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@4726cd35bb13f7bde50cf2761f2499ac7b3aa32c # v4.1.1
+        uses: pypa/cibuildwheel@1828c10ab37f080699c7b81cea34097c684a7074 # v4.2.0
         env:
           CIBW_BUILD: ${{ matrix.python }}-${{ matrix.buildplat[1] }}*
           CIBW_ARCHS: ${{ matrix.buildplat[2] }}
