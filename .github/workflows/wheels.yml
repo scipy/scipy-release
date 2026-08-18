@@ -39,7 +39,7 @@ permissions:
 
 jobs:
   build_wheels:
-    name: BLD > ${{ matrix.python[0] }}-${{ matrix.buildplat[1] }}-${{ matrix.buildplat[2] }}-${{ matrix.buildplat[3] }}
+    name: BLD > ${{ matrix.python }}-${{ matrix.buildplat[1] }}-${{ matrix.buildplat[2] }}-${{ matrix.buildplat[3] }}
     runs-on: ${{ matrix.buildplat[0] }}
     if: (github.repository == 'scipy/scipy-release' || github.repository == '')
     strategy:
@@ -62,8 +62,7 @@ jobs:
         - [macos-14, macosx, arm64, accelerate, "14.0"]
         - [windows-2025, win, AMD64, "", ""]
         - [windows-11-arm, win, ARM64, "", ""]
-        python: [["cp312", "3.12"], ["cp313", "3.13"], ["cp314", "cp314"], ["cp314t", "cp314"]]
-        # python[0] is used to specify the python versions made by cibuildwheel
+        python: ["cp312", "cp313", "cp314", "cp314t"]
 
     steps:
       - name: Checkout scipy-release
@@ -133,7 +132,7 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@4726cd35bb13f7bde50cf2761f2499ac7b3aa32c # v4.1.1
         env:
-          CIBW_BUILD: ${{ matrix.python[0] }}-${{ matrix.buildplat[1] }}*
+          CIBW_BUILD: ${{ matrix.python }}-${{ matrix.buildplat[1] }}*
           CIBW_ARCHS: ${{ matrix.buildplat[2] }}
           CIBW_ENABLE: cpython-prerelease
         with:
@@ -144,7 +143,7 @@ jobs:
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           path: ./dist/*.whl
-          name: ${{ matrix.python[0] }}-${{ matrix.buildplat[1] }}-${{ matrix.buildplat[2] }}-${{ matrix.buildplat[3] }}-${{ matrix.buildplat[4] }}
+          name: ${{ matrix.python }}-${{ matrix.buildplat[1] }}-${{ matrix.buildplat[2] }}-${{ matrix.buildplat[3] }}-${{ matrix.buildplat[4] }}
 
 # -------------------------------------------------------------------------------------
   # Should we upload to nightly. We do this on a scheduled run, or a workflow dispatch with environment 'none'
