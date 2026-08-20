@@ -84,19 +84,18 @@ jobs:
         with:
           python-version: 3.13
 
-      # needed for pkg-config. No longer needed for gfortran
-      - name: win_amd64 - install rtools
+      - name: win_amd64 - configure compilers
         if: ${{ matrix.buildplat[1] == 'win' && matrix.buildplat[2] == 'AMD64' }}
         run: |
-          echo "c:\rtools45\ucrt64\bin" >> $env:GITHUB_PATH
-          
+          echo "CC=gcc" >> $env:GITHUB_ENV
+          echo "CXX=g++" >> $env:GITHUB_ENV
+
           # workaround for https://github.com/scipy/scipy/issues/25067
           rm -fo c:/Strawberry/c/lib/pkgconfig/*.pc
 
-      - name: win_arm64 - set environment variables
+      - name: win_arm64 - configure compilers
         if: matrix.buildplat[1] == 'win' && matrix.buildplat[2] == 'ARM64'
         run: |
-            echo "C:\Program Files\LLVM\bin" >> $env:GIHUB_PATH
             echo "CC=clang-cl" >> $env:GITHUB_ENV
             echo "CXX=clang-cl" >> $env:GITHUB_ENV
             echo "TARGET_ARCH=${{ matrix.buildplat[2] }}" >> $env:GITHUB_ENV
