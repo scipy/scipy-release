@@ -96,6 +96,7 @@ jobs:
       - name: win_arm64 - configure compilers
         if: matrix.buildplat[1] == 'win' #&& matrix.buildplat[2] == 'ARM64'
         run: |
+            echo "C:\Program Files\LLVM\bin" >> $env:GITHUB_PATH
             echo "CC=clang-cl" >> $env:GITHUB_ENV
             echo "CXX=clang-cl" >> $env:GITHUB_ENV
             echo "TARGET_ARCH=${{ matrix.buildplat[2] }}" >> $env:GITHUB_ENV
