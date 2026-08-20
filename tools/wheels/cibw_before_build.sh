@@ -43,7 +43,9 @@ if [[ "$INSTALL_OPENBLAS" = "true" ]] ; then
     echo pkgconf_path is $pkgconf_path, OPENBLAS is ${OPENBLAS}
     rm -rf $pkgconf_path
     mkdir -p $pkgconf_path
-    python -m pip install -r $PROJECT_DIR/scipy-src/requirements/openblas.txt
+    pushd $PROJECT_DIR/scipy-src
+    python -m pip install --group ${OPENBLAS}
+    popd
     python -c "import scipy_${OPENBLAS}; print(scipy_${OPENBLAS}.get_pkg_config())" > $pkgconf_path/scipy-openblas.pc
 
     # Copy scipy-openblas DLL's to a fixed location so we can point delvewheel
@@ -60,8 +62,7 @@ fi
 
 # cibuildwheel doesn't install delvewheel by default
 if [[ $RUNNER_OS == "Windows" ]]; then
-    python -m pip install -r $PROJECT_DIR/requirements/delvewheel_requirements.txt
     # pkgconf - carries out the role of pkg-config.
     # Alternative is pkgconfiglite that you have to install with choco
-    python -m pip install -r $PROJECT_DIR/requirements/pkgconf.txt
+    python -m pip install -r $PROJECT_DIR/scipy-src/requirements/pkgconf.txt
 fi

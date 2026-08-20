@@ -84,26 +84,18 @@ jobs:
         with:
           python-version: 3.13
 
-      # needed for pkg-config. No longer needed for gfortran
-      - name: win_amd64 - install rtools
-        if: ${{ matrix.buildplat[1] == 'win' && matrix.buildplat[2] == 'AMD64' }}
+      - name: Setup windows
+        if: matrix.buildplat[1] == 'win'
         run: |
-          echo "c:\rtools45\ucrt64\bin" >> $env:GITHUB_PATH
-          
+          echo "C:\Program Files\LLVM\bin" >> $env:GITHUB_PATH
+          echo "CC=clang-cl" >> $env:GITHUB_ENV
+          echo "CXX=clang-cl" >> $env:GITHUB_ENV
+          echo "TARGET_ARCH=${{ matrix.buildplat[2] }}" >> $env:GITHUB_ENV
+
           # workaround for https://github.com/scipy/scipy/issues/25067
           rm -fo c:/Strawberry/c/lib/pkgconfig/*.pc
 
-      - name: win_arm64 - set environment variables
-        if: matrix.buildplat[1] == 'win' && matrix.buildplat[2] == 'ARM64'
-        run: |
-            echo "C:\Program Files\LLVM\bin" >> $env:GIHUB_PATH
-            echo "CC=clang-cl" >> $env:GITHUB_ENV
-            echo "CXX=clang-cl" >> $env:GITHUB_ENV
-            echo "TARGET_ARCH=${{ matrix.buildplat[2] }}" >> $env:GITHUB_ENV
-
-      - name: pkg-config-for-win
-        if: runner.os == 'windows'
-        run: |
+          # pkg-config setup
           $CIBW = "${{ github.workspace }}/.openblas"
           # pkgconfig needs a complete path, and not just "./openblas since the
           # build is run in a tmp dir (?)
@@ -201,7 +193,7 @@ jobs:
           rm -rf $pkgconf_path
           mkdir -p $pkgconf_path
 
-          python -m pip install -r $GITHUB_WORKSPACE/requirements/openblas.txt
+          python -m pip install --group $OPENBLAS
           python -c "import scipy_${OPENBLAS}; print(scipy_${OPENBLAS}.get_pkg_config())" > $pkgconf_path/scipy-openblas.pc
           export PKG_CONFIG_PATH=$pkgconf_path
           echo "PKG_CONFIG_PATH=$pkgconf_path" >> "$GITHUB_ENV"
