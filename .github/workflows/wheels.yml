@@ -193,7 +193,7 @@ jobs:
           rm -rf $pkgconf_path
           mkdir -p $pkgconf_path
 
-          python -m pip install -r $GITHUB_WORKSPACE/requirements/openblas.txt
+          python -m pip install --group $OPENBLAS
           python -c "import scipy_${OPENBLAS}; print(scipy_${OPENBLAS}.get_pkg_config())" > $pkgconf_path/scipy-openblas.pc
           export PKG_CONFIG_PATH=$pkgconf_path
           echo "PKG_CONFIG_PATH=$pkgconf_path" >> "$GITHUB_ENV"
