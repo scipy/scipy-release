@@ -84,17 +84,17 @@ jobs:
         with:
           python-version: 3.13
 
-      - name: win_amd64 - configure compilers
-        if: ${{ matrix.buildplat[1] == 'win' && matrix.buildplat[2] == 'AMD64' }}
-        run: |
-          echo "CC=gcc" >> $env:GITHUB_ENV
-          echo "CXX=g++" >> $env:GITHUB_ENV
-
-          # workaround for https://github.com/scipy/scipy/issues/25067
-          rm -fo c:/Strawberry/c/lib/pkgconfig/*.pc
+#      - name: win_amd64 - configure compilers
+#        if: ${{ matrix.buildplat[1] == 'win' && matrix.buildplat[2] == 'AMD64' }}
+#        run: |
+#          echo "CC=gcc" >> $env:GITHUB_ENV
+#          echo "CXX=g++" >> $env:GITHUB_ENV
+#
+#          # workaround for https://github.com/scipy/scipy/issues/25067
+#          rm -fo c:/Strawberry/c/lib/pkgconfig/*.pc
 
       - name: win_arm64 - configure compilers
-        if: matrix.buildplat[1] == 'win' && matrix.buildplat[2] == 'ARM64'
+        if: matrix.buildplat[1] == 'win' #&& matrix.buildplat[2] == 'ARM64'
         run: |
             echo "CC=clang-cl" >> $env:GITHUB_ENV
             echo "CXX=clang-cl" >> $env:GITHUB_ENV
