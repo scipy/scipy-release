@@ -84,28 +84,18 @@ jobs:
         with:
           python-version: 3.13
 
-#      - name: win_amd64 - configure compilers
-#        if: ${{ matrix.buildplat[1] == 'win' && matrix.buildplat[2] == 'AMD64' }}
-#        run: |
-#          echo "CC=gcc" >> $env:GITHUB_ENV
-#          echo "CXX=g++" >> $env:GITHUB_ENV
-#
-#          # workaround for https://github.com/scipy/scipy/issues/25067
-#          rm -fo c:/Strawberry/c/lib/pkgconfig/*.pc
-
-      - name: win_arm64 - configure compilers
-        if: matrix.buildplat[1] == 'win' #&& matrix.buildplat[2] == 'ARM64'
+      - name: Setup windows
+        if: matrix.buildplat[1] == 'win'
         run: |
-            echo "C:\Program Files\LLVM\bin" >> $env:GITHUB_PATH
-            echo "CC=clang-cl" >> $env:GITHUB_ENV
-            echo "CXX=clang-cl" >> $env:GITHUB_ENV
-            echo "TARGET_ARCH=${{ matrix.buildplat[2] }}" >> $env:GITHUB_ENV
-            # workaround for https://github.com/scipy/scipy/issues/25067
-            rm -fo c:/Strawberry/c/lib/pkgconfig/*.pc
+          echo "C:\Program Files\LLVM\bin" >> $env:GITHUB_PATH
+          echo "CC=clang-cl" >> $env:GITHUB_ENV
+          echo "CXX=clang-cl" >> $env:GITHUB_ENV
+          echo "TARGET_ARCH=${{ matrix.buildplat[2] }}" >> $env:GITHUB_ENV
 
-      - name: pkg-config-for-win
-        if: runner.os == 'windows'
-        run: |
+          # workaround for https://github.com/scipy/scipy/issues/25067
+          rm -fo c:/Strawberry/c/lib/pkgconfig/*.pc
+
+          # pkg-config setup
           $CIBW = "${{ github.workspace }}/.openblas"
           # pkgconfig needs a complete path, and not just "./openblas since the
           # build is run in a tmp dir (?)
