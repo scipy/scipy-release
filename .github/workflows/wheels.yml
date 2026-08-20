@@ -100,6 +100,8 @@ jobs:
             echo "CC=clang-cl" >> $env:GITHUB_ENV
             echo "CXX=clang-cl" >> $env:GITHUB_ENV
             echo "TARGET_ARCH=${{ matrix.buildplat[2] }}" >> $env:GITHUB_ENV
+            # workaround for https://github.com/scipy/scipy/issues/25067
+            rm -fo c:/Strawberry/c/lib/pkgconfig/*.pc
 
       - name: pkg-config-for-win
         if: runner.os == 'windows'
