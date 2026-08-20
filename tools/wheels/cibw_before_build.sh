@@ -44,7 +44,7 @@ if [[ "$INSTALL_OPENBLAS" = "true" ]] ; then
     rm -rf $pkgconf_path
     mkdir -p $pkgconf_path
     pushd $PROJECT_DIR/scipy-src
-    python -m pip install --group openblas32
+    python -m pip install --group ${OPENBLAS}
     popd
     python -c "import scipy_${OPENBLAS}; print(scipy_${OPENBLAS}.get_pkg_config())" > $pkgconf_path/scipy-openblas.pc
 
