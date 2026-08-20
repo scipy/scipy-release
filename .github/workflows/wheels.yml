@@ -41,7 +41,7 @@ jobs:
   build_wheels:
     name: BLD > ${{ matrix.python }}-${{ matrix.buildplat[1] }}-${{ matrix.buildplat[2] }}-${{ matrix.buildplat[3] }}
     runs-on: ${{ matrix.buildplat[0] }}
-    if: (github.repository == 'scipy/scipy-release' || github.repository == '')
+    if: (github.repository == 'andyfaff/scipy-release' || github.repository == '')
     strategy:
       # Ensure that a wheel builder finishes even if another fails
       fail-fast: false
@@ -53,16 +53,16 @@ jobs:
         # [windows-2025, win*, "AMD64 x86"]. However, those two require a different compiler setup
         # so easier to separate out here.
         - [ubuntu-24.04, manylinux, x86_64, "", ""]
-        - [ubuntu-24.04, musllinux, x86_64, "", ""]
-        - [ubuntu-24.04-arm, manylinux, aarch64, "", ""]
-        - [ubuntu-24.04-arm, musllinux, aarch64, "", ""]
-        - [macos-15-intel, macosx, x86_64, openblas, "10.15"]
-        - [macos-15-intel, macosx, x86_64, accelerate, "14.0"]
-        - [macos-14, macosx, arm64, openblas, "12.3"]
-        - [macos-14, macosx, arm64, accelerate, "14.0"]
-        - [windows-2025, win, AMD64, "", ""]
-        - [windows-11-arm, win, ARM64, "", ""]
-        python: ["cp312", "cp313", "cp314", "cp314t", "cp315", "cp315t"]
+        #        - [ubuntu-24.04, musllinux, x86_64, "", ""]
+        #        - [ubuntu-24.04-arm, manylinux, aarch64, "", ""]
+        #        - [ubuntu-24.04-arm, musllinux, aarch64, "", ""]
+        #        - [macos-15-intel, macosx, x86_64, openblas, "10.15"]
+        #        - [macos-15-intel, macosx, x86_64, accelerate, "14.0"]
+        #        - [macos-14, macosx, arm64, openblas, "12.3"]
+        #        - [macos-14, macosx, arm64, accelerate, "14.0"]
+        #        - [windows-2025, win, AMD64, "", ""]
+        #        - [windows-11-arm, win, ARM64, "", ""]
+        python: ["cp312"]#, "cp313", "cp314", "cp314t", "cp315", "cp315t"]
 
     steps:
       - name: Checkout scipy-release
