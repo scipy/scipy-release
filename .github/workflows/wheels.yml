@@ -6,6 +6,7 @@ env:
   # repo, and to a tag name (e.g., `v2.3.2`) on a release branch.
   SOURCE_REF_TO_BUILD: main
   UV_VERSION: "0.12.5"
+  UV_HASH: "68a509da24b06b4223a1c0175fb5eb5bc79342b76cbeff0cfe51ac3f5b17b6b2"
 
 on:
   schedule:
@@ -63,7 +64,7 @@ jobs:
         with:
           version: ${{ env.UV_VERSION }}
           # unlike build_wheels, this job is Linux-only, so we can pin the download too
-          checksum: "68a509da24b06b4223a1c0175fb5eb5bc79342b76cbeff0cfe51ac3f5b17b6b2"
+          checksum: ${{ env.UV_HASH }}
           enable-cache: false
 
       - name: Check lock file
