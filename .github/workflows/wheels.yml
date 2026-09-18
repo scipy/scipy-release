@@ -6,6 +6,7 @@ env:
   # repo, and to a tag name (e.g., `v2.3.2`) on a release branch.
   SOURCE_REF_TO_BUILD: main
   UV_VERSION: "0.12.5"
+  UV_HASH: "68a509da24b06b4223a1c0175fb5eb5bc79342b76cbeff0cfe51ac3f5b17b6b2"
 
 on:
   schedule:
@@ -63,7 +64,7 @@ jobs:
         with:
           version: ${{ env.UV_VERSION }}
           # unlike build_wheels, this job is Linux-only, so we can pin the download too
-          checksum: "68a509da24b06b4223a1c0175fb5eb5bc79342b76cbeff0cfe51ac3f5b17b6b2"
+          checksum: ${{ env.UV_HASH }}
           enable-cache: false
 
       - name: Check lock file
@@ -340,6 +341,22 @@ jobs:
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout scipy-release
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          checksum: ${{ env.UV_HASH }}
+          enable-cache: false
+
+      - name: Ensure 7-day cooldown period is enforced for dependencies
+        run: |
+          uv lock --check --exclude-newer "7 days"
+
       - name: Checkout scipy
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
