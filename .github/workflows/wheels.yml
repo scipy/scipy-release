@@ -4,7 +4,7 @@ env:
   # A tag or branch name or a commit hash for the scipy/scipy repo, for which
   # to build wheels. This is normally set to `main` in the main branch of this
   # repo, and to a tag name (e.g., `v2.3.2`) on a release branch.
-  SOURCE_REF_TO_BUILD: main
+  SOURCE_REF_TO_BUILD: 89484473470ce23b85fff99e76c0aceab707b6b8 #main
   UV_VERSION: "0.12.5"
   UV_HASH: "68a509da24b06b4223a1c0175fb5eb5bc79342b76cbeff0cfe51ac3f5b17b6b2"
 
@@ -104,16 +104,16 @@ jobs:
         # [windows-2025, win*, "AMD64 x86"]. However, those two require a different compiler setup
         # so easier to separate out here.
         - [ubuntu-24.04, manylinux, x86_64, "", ""]
-        - [ubuntu-24.04, musllinux, x86_64, "", ""]
-        - [ubuntu-24.04-arm, manylinux, aarch64, "", ""]
-        - [ubuntu-24.04-arm, musllinux, aarch64, "", ""]
-        - [macos-15-intel, macosx, x86_64, openblas, "10.15"]
-        - [macos-15-intel, macosx, x86_64, accelerate, "14.0"]
-        - [macos-14, macosx, arm64, openblas, "12.3"]
-        - [macos-14, macosx, arm64, accelerate, "14.0"]
-        - [windows-2025, win, AMD64, "", ""]
-        - [windows-11-arm, win, ARM64, "", ""]
-        python: ["cp312", "cp313", "cp314", "cp314t", "cp315", "cp315t"]
+        #        - [ubuntu-24.04, musllinux, x86_64, "", ""]
+        #        - [ubuntu-24.04-arm, manylinux, aarch64, "", ""]
+        #        - [ubuntu-24.04-arm, musllinux, aarch64, "", ""]
+        #        - [macos-15-intel, macosx, x86_64, openblas, "10.15"]
+        #        - [macos-15-intel, macosx, x86_64, accelerate, "14.0"]
+        #        - [macos-14, macosx, arm64, openblas, "12.3"]
+        #        - [macos-14, macosx, arm64, accelerate, "14.0"]
+        #        - [windows-2025, win, AMD64, "", ""]
+        #        - [windows-11-arm, win, ARM64, "", ""]
+        python: ["cp312"]#, "cp313", "cp314", "cp314t", "cp315", "cp315t"]
 
     steps:
       - name: Checkout scipy-release
@@ -181,6 +181,13 @@ jobs:
               MACOSX_DEPLOYMENT_TARGET="${MACOSX_DEPLOYMENT_TARGET}""
           fi
           echo "$CIBW_ENV" >> "$GITHUB_ENV"
+
+      - name: Variables for reproducible builds
+        run: |
+          # https://cibuildwheel.pypa.io/en/v2.16.2/options/#environment-pass
+          # cibuildwheel automatically passes the SOURCE_DATE_EPOCH if defined
+          pushd scipy-src
+          echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> $GITHUB_ENV
 
       - name: Build wheels
         uses: pypa/cibuildwheel@1828c10ab37f080699c7b81cea34097c684a7074 # v4.2.0
