@@ -31,6 +31,6 @@ test-core = [
     "pytest-timeout",
 ]
 openblas32 = [
-    "scipy-openblas32==0.3.34.237.0",
+    "scipy-openblas32==0.3.34.237.2",
     "pkgconf==3.0.7.post0; sys_platform == \"win32\"",
 ]
