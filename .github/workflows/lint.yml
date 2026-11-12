@@ -1,0 +1,42 @@
+name: Lint
+
+on:
+  pull_request:
+    branches:
+      - main
+      - maintenance/**
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  # Fails when .github/workflows/actions.lock is out of sync with the
+  # workflows or a locked pin no longer verifies upstream.
+  # To update the lockfile, run `gh actions-lock` (see CONTRIBUTING.md).
+  lockfile:
+    name: Verify actions.lock
+    runs-on: ubuntu-slim
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - run: gh extension install github/gh-actions-lock --pin v0.4.1
+      - run: gh actions-lock --verify
+
+  zizmor:
+    name: zizmor
+    runs-on: ubuntu-slim
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - run: pipx run zizmor==1.32.0 --format=github .
